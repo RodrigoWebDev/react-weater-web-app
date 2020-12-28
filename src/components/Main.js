@@ -3,6 +3,7 @@ import Loader from "./Loader";
 import Error from "./Error";
 import WheaterInfo from "./WheaterInfo";
 import axios from "axios"
+import Swal from 'sweetalert2'
 import "./Main.css"
 
 const Main = () => {
@@ -42,7 +43,12 @@ const Main = () => {
         })
 
     }, function (error) {
-      console.error("Error Code = " + error.code + " - " + error.message)
+      Swal.fire({
+        title: "Erro!",
+        text: "Error Code = " + error.code + " - " + error.message,
+        icon: "error",
+        confirmButtonText: 'okay'
+      })
     });
   }
 

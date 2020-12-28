@@ -11,7 +11,7 @@ const WheaterInfo = ({ currentLocation, temperatureData, weatherInfo, updateWeat
   const _currentLocation = `${currentLocation.city_district}, ${currentLocation.city}`
   const weatherDescription = `${getCurrentDay()} • ${weatherInfo.description}`
   const wheaterIcon = `https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`
-  const temperature = temperatureData.temp ? `${temperatureData.temp.toFixed(0)}º` : ""
+  const temperature = temperatureData.temp ? `${temperatureData.temp.toFixed(0)}` : ""
 
   return (
     <div className="weather-info">
@@ -25,7 +25,7 @@ const WheaterInfo = ({ currentLocation, temperatureData, weatherInfo, updateWeat
           <img src={wheaterIcon} />
           <div className="weather-info-temperature">
             <div>{temperature}</div>
-            <div>c</div>
+            <div>ºC</div>
           </div>
 
         </div>
