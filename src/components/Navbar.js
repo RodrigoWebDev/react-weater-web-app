@@ -8,7 +8,7 @@ const Navbar = () => {
       <div className="luxbar-menu luxbar-menu-right luxbar-menu-dark">
         <ul className="luxbar-navigation">
           <li className="luxbar-header">
-            <a className="luxbar-brand" href="#">Wather App</a>
+            <a className="luxbar-brand" href="#">Weather App</a>
             <label className="luxbar-hamburger"
               htmlFor="luxbar-checkbox"> <span></span> </label>
           </li>
