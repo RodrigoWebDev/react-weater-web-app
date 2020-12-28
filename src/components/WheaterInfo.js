@@ -1,22 +1,33 @@
 import React from 'react';
+import './WheaterInfo.css';
 
 function getCurrentDay() {
-  let Xmas95 = new Date();
+  let date = new Date();
   let options = { weekday: 'long' };
-  return new Intl.DateTimeFormat('pt-BR', options).format(Xmas95);
+  return new Intl.DateTimeFormat('pt-BR', options).format(date);
 }
 
-const WheaterInfo = ({ currentLocation, temperatureData, weatherInfo }) => {
-  return (
-    <>
-      <div>{currentLocation.city_district}, {currentLocation.city}</div>
-      <div>{getCurrentDay()}</div>
-      <div>{weatherInfo.description}</div>
+const WheaterInfo = ({ currentLocation, temperatureData, weatherInfo, updateWeather }) => {
+  const _currentLocation = `${currentLocation.city_district}, ${currentLocation.city}`
+  const weatherDescription = `${getCurrentDay()} • ${weatherInfo.description}`
+  const wheaterIcon = `https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`
+  const temperature = temperatureData.temp ? `${temperatureData.temp.toFixed(0)}º` : ""
 
-      <div style={{ display: "flex" }}>
-        <div>
-          <img src={`https://openweathermap.org/img/wn/${weatherInfo.icon}@2x.png`} />
-          <span>{temperatureData.temp ? `${temperatureData.temp.toFixed(0)} ºC` : ""}</span>
+  return (
+    <div className="weather-info">
+      <div className="weather-info-header">
+        <h2>{_currentLocation}</h2>
+        <p className="wheater-description">{weatherDescription}</p>
+      </div>
+
+      <div className="weather-info-body">
+        <div className="weather-info-body-left">
+          <img src={wheaterIcon} />
+          <div className="weather-info-temperature">
+            <div>{temperature}</div>
+            <div>c</div>
+          </div>
+
         </div>
 
         <div>
@@ -24,8 +35,18 @@ const WheaterInfo = ({ currentLocation, temperatureData, weatherInfo }) => {
           <div>Pressão: {temperatureData.pressure}</div>
         </div>
       </div>
-    </>
+
+      <div className="weather-info-Footer">
+        <button
+          className="btn btn-light"
+          onClick={() => updateWeather()}
+        >
+          Atualizar
+        </button>
+      </div>
+    </div>
   );
 }
 
-export default WheaterInfo;
+export default WheaterInfo
+
