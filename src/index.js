@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { h, render } from 'preact'
+import htm from 'htm'
+import App from './components/App'
+import './main.css'
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const html = htm.bind(h)
 
-serviceWorker.unregister();
+render(html`<${App}/>`, document.getElementById('app'))
