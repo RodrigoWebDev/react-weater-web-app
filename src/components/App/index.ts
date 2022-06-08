@@ -4,43 +4,70 @@ import htm from 'htm'
 
 const html = htm.bind(h)
 
-interface GeolocationInterface {
-  coords: {
-    accuracy: number | null
-    altitude: number | null
-    altitudeAccuracy: number |null
-    heading: number | null
-    latitude: number | null
-    longitude: number | null
-    speed: number | null
-  }
-  timestamp: number | null
-} 
+interface geolocationDataInterface {
+  latitude: number | undefined
+  longitude: number | undefined
+}
 
-const App = () => {
-  const [isGeolocationSupported, setSsGeolocationSupported] = useState<boolean | undefined>(undefined)
-  const [geolocationData, setGeolocationData] = useState<GeolocationInterface | undefined>()
+interface objectUnknowKeys {
+  [key: string]: any
+}
 
-  const getGeoLocationData = () => {
-    if (navigator.geolocation) {
+const App = (): objectUnknowKeys => {
+  const [isGeolocationSupported, setIsGeolocationSupported] = useState(false)
+  const [geolocationData, setGeolocationData] = useState<geolocationDataInterface>({
+    latitude: undefined,
+    longitude: undefined
+  })
+
+  const isEmptyObject = (obj: objectUnknowKeys): boolean => Object.keys(obj).length === 0
+
+  const getGeoLocationData = (): void => {
+    if (isEmptyObject(navigator.geolocation)) {
       navigator.geolocation.getCurrentPosition(data => {
-        setGeolocationData(data)
-      });
-      setSsGeolocationSupported(true)
+        setGeolocationData(data.coords)
+      })
+      setIsGeolocationSupported(true)
     } else {
-      setSsGeolocationSupported(false)
+      alert('Geolocalização não suportada')
     }
+  }
+
+  const getWeatherData = ({ latitude, longitude }: {latitude: number, longitude: number}): void => {
+    const apiKey = 'c307ac859bc3423a830171218220706'
+    const endpoint = `http://api.weatherapi.com/v1/current.json?key=${apiKey}q=${latitude},${longitude}&aqi=yes`
+    console.log({ endpoint })
+
+    fetch(endpoint)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        console.error(error)
+      })
   }
 
   useEffect(() => {
     getGeoLocationData()
   }, [])
 
-  return html`
-    ${isGeolocationSupported ? 
-      html`<h1>Gelocation is supported</h1>` :
-      html`<h1>Gelocation is NOT supported</h1>`
+  useEffect(() => {
+    if (geolocationData.latitude !== undefined) {
+      console.log(geolocationData.latitude)
+      const {
+        latitude = 0,
+        longitude = 0
+      } = geolocationData
+
+      getWeatherData({
+        latitude,
+        longitude
+      })
     }
+  }, [geolocationData])
+
+  return html`
+    ${isGeolocationSupported && html`<h1>Geolocation is supported</h1>`}
   `
 }
 
