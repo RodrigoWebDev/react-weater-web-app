@@ -1,26 +1,24 @@
 import { h } from 'preact'
 import { useState, useEffect } from 'preact/hooks'
 import htm from 'htm'
+import Swal from "sweetalert2"
+
+import { objectUnknowKeys } from "../../types"
+import { isEmptyObject } from "../../utils"
 
 const html = htm.bind(h)
 
-interface geolocationDataInterface {
+interface GeolocationDataInterface {
   latitude: number | undefined
   longitude: number | undefined
 }
 
-interface objectUnknowKeys {
-  [key: string]: any
-}
-
 const App = (): objectUnknowKeys => {
   const [isGeolocationSupported, setIsGeolocationSupported] = useState(false)
-  const [geolocationData, setGeolocationData] = useState<geolocationDataInterface>({
+  const [geolocationData, setGeolocationData] = useState<GeolocationDataInterface>({
     latitude: undefined,
     longitude: undefined
   })
-
-  const isEmptyObject = (obj: objectUnknowKeys): boolean => Object.keys(obj).length === 0
 
   const getGeoLocationData = (): void => {
     if (isEmptyObject(navigator.geolocation)) {
@@ -29,7 +27,12 @@ const App = (): objectUnknowKeys => {
       })
       setIsGeolocationSupported(true)
     } else {
-      alert('Geolocalização não suportada')
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Geolocalização não suportada',
+      })
+      setIsGeolocationSupported(false)
     }
   }
 
@@ -58,6 +61,9 @@ const App = (): objectUnknowKeys => {
         latitude = 0,
         longitude = 0
       } = geolocationData
+
+      console.log({latitude})
+      console.log({longitude})
 
       getWeatherData({
         latitude,
